@@ -8,7 +8,6 @@ import (
 
 func main() {
 	var PORT string
-
 	if PORT = os.Getenv("PORT"); PORT == "" {
 		PORT = "3001"
 	}
@@ -17,5 +16,6 @@ func main() {
 		fmt.Fprintf(w, "Hello World from path: %s\n", r.URL.Path)
 	})
 
+	fmt.Printf("Running on localhost:%s", PORT)
 	http.ListenAndServe(":"+PORT, nil)
 }
