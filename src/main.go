@@ -15,7 +15,7 @@ type Profile struct {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	profile := Profile{"Cody8", ""}
+	profile := Profile{"Cody9", ""}
 
 	js, err := json.Marshal(profile)
 	if err != nil {
