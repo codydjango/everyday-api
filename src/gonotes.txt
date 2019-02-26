@@ -1,0 +1,80 @@
+	// router := mux.NewRouter()
+	// router.HandleFunc("/nonce", NonceHandler).Methods("GET")
+	// router.Use(simpleMw)
+	// amw := authenticationMiddleware{}
+	// amw.Populate()
+	// router.Use(amw.Middleware)
+
+	// EXAMPLES
+	// router.HandleFunc("/products/{key}", ProductHandler)
+	// router.HandleFunc("/articles/{category}/", ArticlesCategoryHandler)
+	// router.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler)
+	// router.HandleFunc("/articles/{category}/{sort:(?:asc|desc|new)}", ArticlesCategoryHandler)
+
+	// http.Handle("/", router)
+
+
+
+	// http.ListenAndServe(":"+PORT, nil)
+
+	// cors.Default() setup the middleware with default options being
+	// all origins accepted with simple methods (GET, POST). See
+	// documentation below for more options.
+
+    	// srv := &http.Server{
+	// 	Handler: router,
+	// 	Addr:    "127.0.0.1:" + PORT,
+	// 	// Good practice: enforce timeouts for servers you create!
+	// 	WriteTimeout: 15 * time.Second,
+	// 	ReadTimeout:  15 * time.Second,
+	// }
+
+	// srv := &http.Server{
+	//     Addr:         "0.0.0.0:8080",
+	//     // Good practice to set timeouts to avoid Slowloris attacks.
+	//     WriteTimeout: time.Second * 15,
+	//     ReadTimeout:  time.Second * 15,
+	//     IdleTimeout:  time.Second * 60,
+	//     Handler: r, // Pass our instance of gorilla/mux in.
+	// }
+
+
+    // github.io
+//192.30.252.153
+//192.30.252.154
+//localhost:1234
+
+// simpleMw is a middleware function for logging the requestURI
+// func simpleMw(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(responseWriter http.ResponseWriter, request *http.Request) {
+// 		log.Println("requestURI: %s", request.RequestURI)
+// 		next.ServeHTTP(responseWriter, request)
+// 	})
+// }
+
+// authenticationMiddleware Define our struct
+// type authenticationMiddleware struct {
+// 	tokenUsers map[string]string
+// }
+
+// func (amw *authenticationMiddleware) Populate() {
+// 	amw.tokenUsers["00000000"] = "user0"
+// 	amw.tokenUsers["aaaaaaaa"] = "userA"
+// 	amw.tokenUsers["05f717e5"] = "randomUser"
+// 	amw.tokenUsers["deadbeef"] = "user0"
+// }
+
+// // Middleware function, which will be called for each request
+// func (amw *authenticationMiddleware) Middleware(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		token := r.Header.Get("X-Session-Token")
+
+// 		if user, found := amw.tokenUsers[token]; found {
+// 			// We found the token in our map
+// 			log.Printf("Authenticated user %s\n", user)
+// 			next.ServeHTTP(w, r)
+// 		} else {
+// 			http.Error(w, "Forbidden", http.StatusForbidden)
+// 		}
+// 	})
+// }

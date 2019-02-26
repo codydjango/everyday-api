@@ -3,30 +3,26 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/rs/cors"
 )
 
-type Profile struct {
-	Nonce     string `json:"nonce"`
-	publicKey string `json:"publicKey"`
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	profile := Profile{"Cody9", ""}
-
-	js, err := json.Marshal(profile)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-
-	// fmt.Fprintf(w, "Hello World from path: %s\n", r.URL.Path)
+func getCors() *cors.Cors {
+	return cors.New(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:1234",
+			"http://codydjango.github.io",
+			"192.30.252.153",
+			"192.30.252.154",
+		},
+		AllowCredentials: true,
+		Debug:            true,
+	})
 }
 
 func main() {
@@ -35,7 +31,17 @@ func main() {
 		PORT = "3001"
 	}
 
-	http.HandleFunc("/", Index)
-	fmt.Printf("Running on localhost:%s", PORT)
-	http.ListenAndServe(":"+PORT, nil)
+	router := NewRouter()
+	cors := getCors()
+
+	srv := &http.Server{
+		Addr:         fmt.Sprintf("0.0.0.0:%s", PORT),
+		WriteTimeout: time.Second * 15,
+		ReadTimeout:  time.Second * 15,
+		IdleTimeout:  time.Second * 60,
+		Handler:      cors.Handler(router),
+	}
+
+	log.Printf("Running on localhost:%s", PORT)
+	log.Fatal(srv.ListenAndServe())
 }

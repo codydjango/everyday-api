@@ -1,6 +1,9 @@
 FROM golang:alpine
 RUN apk add git bash
 RUN go get github.com/cespare/reflex
+RUN go get github.com/gorilla/mux
+RUN go get github.com/rs/cors
+
 SHELL ["/bin/bash", "-c"]
 ENV PORT=3001
 

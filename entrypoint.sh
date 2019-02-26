@@ -1,2 +1,2 @@
 #!/bin/bash
-reflex -s -r \.go$ -- go run main.go
+reflex -s -r \.go$ -- go run *.go
