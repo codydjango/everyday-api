@@ -1,6 +1,6 @@
 BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 ROOT_DIR="$(dirname "$BIN_DIR")";
-SRC_DIR="$BIN_DIR/src";
+SRC_DIR="$ROOT_DIR/src";
 
 buildServer () {
     echo 'build goserver'
