@@ -26,16 +26,16 @@ func VersionHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	responseWriter.Write(json)
 }
 
-var nonce int
+// AddressNonceLookup keep track of the nonce for each address
+var AddressNonceLookup = make(map[string]int)
 
-// NonceHandler controller
-func NonceHandler(responseWriter http.ResponseWriter, request *http.Request) {
+// AddressNonceHandler controller
+func AddressNonceHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	publicKey := vars["address"]
-
-	nonce++
+	AddressNonceLookup[publicKey]++
 	keyMapping := make(map[string]string)
-	keyMapping["nonce"] = strconv.Itoa(nonce)
+	keyMapping["nonce"] = strconv.Itoa(AddressNonceLookup[publicKey])
 	keyMapping["publicKey"] = publicKey
 
 	json, err := json.Marshal(keyMapping)

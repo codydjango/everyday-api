@@ -12,19 +12,20 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
+// Routes are the registered routes
 type Routes []Route
 
 var routes = Routes{
 	Route{
 		"Version",
 		"GET",
-		"/version",
+		"/version/",
 		VersionHandler,
 	},
 	Route{
 		"Nonce",
 		"GET",
-		"/nonce/{address}",
-		NonceHandler,
+		"/{address}/nonce/",
+		AddressNonceHandler,
 	},
 }
