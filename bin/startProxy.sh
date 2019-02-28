@@ -8,10 +8,10 @@ docker run --detach \
     --volume /etc/nginx/vhost.d \
     --volume /usr/share/nginx/html \
     --volume /var/run/docker.sock:/tmp/docker.sock:ro \
-    jwilder/nginx-proxy
+    jwilder/nginx-proxy;
 
 docker run --detach \
     --name nginx-proxy-letsencrypt \
     --volumes-from nginx-proxy \
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
-    jrcs/letsencrypt-nginx-proxy-companion
+    jrcs/letsencrypt-nginx-proxy-companion;
