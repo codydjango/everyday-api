@@ -9,6 +9,7 @@ LETSENCRYPT_HOST="everyday.invisiblehands.ca";
 LETSENCRYPT_EMAIL="cody@invisiblehands.ca";
 
 docker run --detach \
+    --rm
     --name goserver \
     --env "ENVIRONMENT=${ENVIRONMENT}" \
     --env "VIRTUAL_HOST=${VIRTUAL_HOST}" \
