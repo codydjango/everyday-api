@@ -2,24 +2,23 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/rs/cors"
 )
 
-// "github.com/rs/cors"
-
-// func getCors() *cors.Cors {
-// 	return cors.New(cors.Options{
-// 		AllowedOrigins: []string{
-// 			"http://localhost:1234",
-// 			"https://codydjango.github.io",
-// 		},
-// 		AllowCredentials: true,
-// 		Debug:            true,
-// 	})
-// }
+func getCors() *cors.Cors {
+	return cors.New(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:1234",
+			"https://codydjango.github.io",
+		},
+		AllowCredentials: true,
+		Debug:            true,
+	})
+}
 
 func main() {
 	var PORT string
@@ -27,29 +26,22 @@ func main() {
 		PORT = "3001"
 	}
 
-	// router := NewRouter()
-	// cors := getCors()
-	// router := cors.Handler(router),
+	router := NewRouter()
+	cors := getCors()
+	router := cors.Handler(router),
 
-	// srv := &http.Server{
-	// 	Addr:    fmt.Sprintf("0.0.0.0:%s", PORT),
-	// 	Handler: router,
-	// }
+	srv := &http.Server{
+		Addr:    fmt.Sprintf("0.0.0.0:%s", PORT),
+		Handler: router,
+	}
 
 	// WriteTimeout: time.Second * 2,
 	// ReadTimeout:  time.Second * 2,
 	// IdleTimeout:  time.Second * 5,
 	// https://github.com/gorilla/mux#graceful-shutdown
+
 	log.Println(fmt.Sprintf("Running on 0.0.0.0:%s", PORT))
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	})
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
-	// log.Println(srv.ListenAndServe())
-	// log.Fatal(srv.ListenAndServe())
+	log.Fatal(srv.ListenAndServe())
 
 	// go func() {
 	// 	if err := srv.ListenAndServe(); err != nil {
