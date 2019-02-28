@@ -5,4 +5,10 @@ ROOT_DIR="$(dirname $BIN_DIR)";
 SRC_DIR="$ROOT_DIR/src";
 ENVIRONMENT="development"
 
-docker run --rm -p 3001:3001 -it --name goserver -e ENVIRONMENT=${ENVIRONMENT} --mount source=${SRC_DIR},destination=/go/app/src,type=bind goserver
+docker run \
+    --rm \
+    --name goserver \
+    --publish 3001:3001 \
+    --env ENVIRONMENT=${ENVIRONMENT} \
+    --mount source=${SRC_DIR},destination=/go/app/src,type=bind \
+    goserver
