@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/rs/cors"
 )
@@ -30,13 +31,13 @@ func main() {
 	cors := getCors()
 
 	srv := &http.Server{
-		Addr:    fmt.Sprintf("0.0.0.0:%s", PORT),
-		Handler: cors.Handler(router),
+		Addr:         fmt.Sprintf("0.0.0.0:%s", PORT),
+		Handler:      cors.Handler(router),
+		WriteTimeout: time.Second * 10,
+		ReadTimeout:  time.Second * 10,
+		IdleTimeout:  time.Second * 10,
 	}
 
-	// WriteTimeout: time.Second * 2,
-	// ReadTimeout:  time.Second * 2,
-	// IdleTimeout:  time.Second * 5,
 	// https://github.com/gorilla/mux#graceful-shutdown
 
 	log.Println(fmt.Sprintf("Running on 0.0.0.0:%s", PORT))
