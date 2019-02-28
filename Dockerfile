@@ -6,6 +6,7 @@ RUN go get github.com/rs/cors
 
 SHELL ["/bin/bash", "-c"]
 ENV PORT=3001
+EXPOSE 3001
 
 ADD ./src ./app/src
 ADD ./entrypoint.sh /go/app/entrypoint.sh

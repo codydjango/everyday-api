@@ -1,0 +1,4 @@
+bare: `docker run --name docker-nginx -p 80:80 nginx`
+
+proxy
+`docker run -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy`
