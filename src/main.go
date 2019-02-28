@@ -16,7 +16,7 @@ func getCors() *cors.Cors {
 			"https://codydjango.github.io",
 		},
 		AllowCredentials: true,
-		Debug:            true,
+		Debug:            false,
 	})
 }
 
