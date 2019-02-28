@@ -8,7 +8,9 @@ echo "entrypoint environment: ${ENVIRONMENT}"
 
 if [ "$ENVIRONMENT" = "production" ]
 then
-    reflex -s -r \.go$ -- go run *.go
+    echo "starting production server"
+    go build -o ../build/server *.go && ../build/server
 else
-    go run *.go
+    echo "starting development server"
+    reflex -s -r \.go$ -- go run *.go
 fi
