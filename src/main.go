@@ -29,37 +29,16 @@ func main() {
 
 	router := NewRouter()
 	cors := getCors()
+	address := fmt.Sprintf("0.0.0.0:%s", PORT)
 
 	srv := &http.Server{
-		Addr:         fmt.Sprintf("0.0.0.0:%s", PORT),
+		Addr:         address,
 		Handler:      cors.Handler(router),
 		WriteTimeout: time.Second * 10,
 		ReadTimeout:  time.Second * 10,
 		IdleTimeout:  time.Second * 10,
 	}
 
-	// https://github.com/gorilla/mux#graceful-shutdown
-
-	log.Println(fmt.Sprintf("Running on 0.0.0.0:%s", PORT))
+	log.Println(fmt.Sprintf("Running on %s", address))
 	log.Fatal(srv.ListenAndServe())
-
-	// go func() {
-	// 	if err := srv.ListenAndServe(); err != nil {
-	// 		log.Println(err)
-	// 	}
-	// }()
-
-	// var wait time.Duration
-	// flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
-	// flag.Parse()
-
-	// c := make(chan os.Signal, 1)
-	// signal.Notify(c, os.Interrupt)
-	// <-c
-
-	// ctx, cancel := context.WithTimeout(context.Background(), wait)
-	// defer cancel()
-	// srv.Shutdown(ctx)
-	// log.Println("Shutting down...")
-	// os.Exit(0)
 }
