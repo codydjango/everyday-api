@@ -5,20 +5,20 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/rs/cors"
 )
 
-func getCors() *cors.Cors {
-	return cors.New(cors.Options{
-		AllowedOrigins: []string{
-			"http://localhost:1234",
-			"https://codydjango.github.io",
-		},
-		AllowCredentials: true,
-		Debug:            true,
-	})
-}
+// "github.com/rs/cors"
+
+// func getCors() *cors.Cors {
+// 	return cors.New(cors.Options{
+// 		AllowedOrigins: []string{
+// 			"http://localhost:1234",
+// 			"https://codydjango.github.io",
+// 		},
+// 		AllowCredentials: true,
+// 		Debug:            true,
+// 	})
+// }
 
 func main() {
 	var PORT string
@@ -27,7 +27,7 @@ func main() {
 	}
 
 	router := NewRouter()
-	cors := getCors()
+	// cors := getCors()
 	// router := cors.Handler(router),
 
 	srv := &http.Server{
