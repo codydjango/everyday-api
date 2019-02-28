@@ -14,9 +14,7 @@ func getCors() *cors.Cors {
 	return cors.New(cors.Options{
 		AllowedOrigins: []string{
 			"http://localhost:1234",
-			"http://codydjango.github.io",
-			"192.30.252.153",
-			"192.30.252.154",
+			"https://codydjango.github.io",
 		},
 		AllowCredentials: true,
 		Debug:            true,
