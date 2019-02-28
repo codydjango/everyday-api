@@ -37,9 +37,9 @@ func main() {
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("0.0.0.0:%s", PORT),
-		WriteTimeout: time.Second * 15,
-		ReadTimeout:  time.Second * 15,
-		IdleTimeout:  time.Second * 60,
+		WriteTimeout: time.Second * 2,
+		ReadTimeout:  time.Second * 2,
+		IdleTimeout:  time.Second * 5,
 		Handler:      cors.Handler(router),
 	}
 
