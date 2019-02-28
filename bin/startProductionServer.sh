@@ -6,4 +6,4 @@ SRC_DIR="$ROOT_DIR/src";
 VIRTUAL_HOST="everyday.invisiblehands.ca"
 ENVIRONMENT="production"
 
-docker run --rm -p 3001:3001 -it --name goserver -e VIRTUAL_HOST=${VIRTUAL_HOST} -e ENVIRONMENT=${ENVIRONMENT} goserver
+docker run --rm -it --name goserver -e VIRTUAL_HOST=${VIRTUAL_HOST} -e ENVIRONMENT=${ENVIRONMENT} goserver
