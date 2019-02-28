@@ -1,13 +1,10 @@
 package main
 
 import (
-	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
 	"time"
 
 	"github.com/rs/cors"
@@ -45,23 +42,25 @@ func main() {
 
 	// https://github.com/gorilla/mux#graceful-shutdown
 	log.Println(fmt.Sprintf("Running on localhost:%s", PORT))
-	go func() {
-		if err := srv.ListenAndServe(); err != nil {
-			log.Println(err)
-		}
-	}()
+	log.Fatal(srv.ListenAndServe())
 
-	var wait time.Duration
-	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
-	flag.Parse()
+	// go func() {
+	// 	if err := srv.ListenAndServe(); err != nil {
+	// 		log.Println(err)
+	// 	}
+	// }()
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	<-c
+	// var wait time.Duration
+	// flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
+	// flag.Parse()
 
-	ctx, cancel := context.WithTimeout(context.Background(), wait)
-	defer cancel()
-	srv.Shutdown(ctx)
-	log.Println("Shutting down...")
-	os.Exit(0)
+	// c := make(chan os.Signal, 1)
+	// signal.Notify(c, os.Interrupt)
+	// <-c
+
+	// ctx, cancel := context.WithTimeout(context.Background(), wait)
+	// defer cancel()
+	// srv.Shutdown(ctx)
+	// log.Println("Shutting down...")
+	// os.Exit(0)
 }
