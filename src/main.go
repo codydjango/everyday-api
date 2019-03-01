@@ -28,7 +28,7 @@ func main() {
 	}
 
 	cors := getCors()
-	router := cors.Handler(NewRouter())
+	router := cors.Handler(CreateRouter())
 	address := fmt.Sprintf("0.0.0.0:%s", PORT)
 
 	srv := &http.Server{

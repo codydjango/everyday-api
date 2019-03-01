@@ -10,7 +10,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter() *mux.Router {
+// CreateRouter creates a router for the api.
+func CreateRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
