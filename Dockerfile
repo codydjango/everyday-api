@@ -1,8 +1,11 @@
 FROM golang:alpine
-RUN apk add git bash
+RUN apk add git bash build-base
 RUN go get github.com/cespare/reflex
 RUN go get github.com/gorilla/mux
 RUN go get github.com/rs/cors
+RUN go get github.com/ethereum/go-ethereum/crypto
+RUN go get github.com/ethereum/go-ethereum/common
+RUN go get github.com/ethereum/go-ethereum/common/hexutil
 
 SHELL ["/bin/bash", "-c"]
 ENV PORT=3001

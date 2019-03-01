@@ -27,13 +27,13 @@ func main() {
 		PORT = "3001"
 	}
 
-	router := NewRouter()
 	cors := getCors()
+	router := cors.Handler(NewRouter())
 	address := fmt.Sprintf("0.0.0.0:%s", PORT)
 
 	srv := &http.Server{
 		Addr:         address,
-		Handler:      cors.Handler(router),
+		Handler:      router,
 		WriteTimeout: time.Second * 10,
 		ReadTimeout:  time.Second * 10,
 		IdleTimeout:  time.Second * 10,

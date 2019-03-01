@@ -19,7 +19,7 @@ func NewRouter() *mux.Router {
 
 	router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
-	})
+	}).Methods("GET")
 
 	return router
 }

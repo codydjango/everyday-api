@@ -25,7 +25,13 @@ var routes = Routes{
 	Route{
 		"Nonce",
 		"GET",
-		"/{address}/nonce/",
+		"/address/{address}/nonce/",
 		AddressNonceHandler,
+	},
+	Route{
+		"Authentication",
+		"POST",
+		"/authentication/",
+		AuthenticationHandler,
 	},
 }
