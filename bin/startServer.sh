@@ -7,6 +7,8 @@ ENVIRONMENT="development";
 
 docker run \
     --rm \
+    --interactive \
+    --tty \
     --name goserver \
     --publish 3001:3001 \
     --env "ENVIRONMENT=${ENVIRONMENT}" \
