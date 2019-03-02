@@ -6,6 +6,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -51,8 +55,9 @@ var AddressNonceLookup = make(map[string]int)
 type Claim struct {
 	Signature     string `json:"signature,omitempty"`
 	PublicAddress string `json:"publicAddress,omitempty"`
-	Verified      bool   `json:"verified"`
+	Verified      bool   `json:"-"`
 	Challenge     string `json:"-"`
+	Token         string `json:"token,omitempty"`
 }
 
 func (c Claim) getNonce() int {
@@ -78,6 +83,23 @@ func (c *Claim) verify() {
 
 func (c *Claim) updateNonce() {
 	AddressNonceLookup[c.PublicAddress]++
+}
+
+func (c *Claim) updateToken() {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"name":          "unknown",
+		"publicAddress": c.PublicAddress,
+		"exp":           time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	secretSigningKey := "superdupersecret"
+	tokenString, err := token.SignedString([]byte(secretSigningKey))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.Token = tokenString
 }
 
 func (c *Claim) isValid() bool {

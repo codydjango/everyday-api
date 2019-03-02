@@ -6,6 +6,7 @@ RUN go get github.com/rs/cors
 RUN go get github.com/ethereum/go-ethereum/crypto
 RUN go get github.com/ethereum/go-ethereum/common
 RUN go get github.com/ethereum/go-ethereum/common/hexutil
+RUN go get github.com/dgrijalva/jwt-go
 
 SHELL ["/bin/bash", "-c"]
 ENV PORT=3001

@@ -82,6 +82,7 @@ func AuthenticationHandler(responseWriter http.ResponseWriter, request *http.Req
 
 	if claim.Verified == true {
 		claim.updateNonce()
+		claim.updateToken()
 	}
 
 	json, err := json.Marshal(claim)
