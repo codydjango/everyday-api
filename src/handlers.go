@@ -57,7 +57,6 @@ func AddressNonceHandler(responseWriter http.ResponseWriter, request *http.Reque
 
 // DecodeClaim is the function that decodes the json into a claim struct
 func DecodeClaim(r io.ReadCloser) (x *Claim, err error) {
-	// x = new(Claim)
 	x = &Claim{}
 	err = json.NewDecoder(r).Decode(x)
 	return
@@ -94,4 +93,54 @@ func AuthenticationHandler(responseWriter http.ResponseWriter, request *http.Req
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.WriteHeader(http.StatusOK)
 	responseWriter.Write(json)
+}
+
+// Session for session info
+type Session struct {
+	Name string `json:"name,omitempty"`
+}
+
+// AddressNameLookup keep track of the nonce for each address
+var AddressNameLookup = make(map[string]string)
+
+// DecodeSession is the function that decodes the json into a session struct
+func DecodeSession(r io.ReadCloser) (x *Session, err error) {
+	x = &Session{}
+	err = json.NewDecoder(r).Decode(x)
+	return
+}
+
+// SessionGetHandler controller
+func SessionGetHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	publicKey := vars["address"]
+	name := AddressNameLookup[publicKey]
+	session := Session{name}
+
+	json, err := json.Marshal(session)
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	responseWriter.WriteHeader(http.StatusOK)
+	responseWriter.Write(json)
+}
+
+// SessionPostHandler controller
+func SessionPostHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	publicKey := vars["address"]
+
+	session, err := DecodeSession(request.Body)
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	AddressNameLookup[publicKey] = session.Name
+
+	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	responseWriter.WriteHeader(http.StatusOK)
 }

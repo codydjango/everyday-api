@@ -22,7 +22,15 @@ func CreateRouter() *mux.Router {
 		PathPrefix("/api").
 		Subrouter()
 
-	for _, route := range routes {
+	for _, route := range apiRoutes {
+		apiRouter.
+			Methods(route.Method).
+			Path(route.Pattern).
+			Name(route.Name).
+			Handler(Logger(route.HandlerFunc, route.Name))
+	}
+
+	for _, route := range authenticatedAPIRoutes {
 		apiRouter.
 			Methods(route.Method).
 			Path(route.Pattern).

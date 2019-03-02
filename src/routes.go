@@ -19,7 +19,7 @@ type Route struct {
 // Routes are the registered routes
 type Routes []Route
 
-var routes = Routes{
+var apiRoutes = Routes{
 	Route{
 		"Version",
 		"GET",
@@ -37,5 +37,20 @@ var routes = Routes{
 		"POST",
 		"/authentication/",
 		AuthenticationHandler,
+	},
+}
+
+var authenticatedAPIRoutes = Routes{
+	Route{
+		"SessionGet",
+		"GET",
+		"/address/{address}/session/",
+		SessionGetHandler,
+	},
+	Route{
+		"SessionPost",
+		"POST",
+		"/address/{address}/session/",
+		SessionPostHandler,
 	},
 }
