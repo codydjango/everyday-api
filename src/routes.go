@@ -29,7 +29,7 @@ var apiRoutes = Routes{
 	Route{
 		"Nonce",
 		"GET",
-		"/address/{address}/nonce/",
+		"/account/{account}/nonce/",
 		AddressNonceHandler,
 	},
 	Route{
@@ -44,13 +44,13 @@ var authenticatedAPIRoutes = Routes{
 	Route{
 		"SessionGet",
 		"GET",
-		"/address/{address}/session/",
+		"/account/{account}/data/",
 		SessionGetHandler,
 	},
 	Route{
 		"SessionPost",
 		"POST",
-		"/address/{address}/session/",
+		"/account/{account}/data/",
 		SessionPostHandler,
 	},
 }

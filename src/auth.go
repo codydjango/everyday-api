@@ -53,15 +53,15 @@ var AddressNonceLookup = make(map[string]int)
 
 // Claim is a little struct for helping with authentication
 type Claim struct {
-	Signature     string `json:"signature,omitempty"`
-	PublicAddress string `json:"publicAddress,omitempty"`
-	Verified      bool   `json:"-"`
-	Challenge     string `json:"-"`
-	Token         string `json:"token,omitempty"`
+	Signature string `json:"signature,omitempty"`
+	Account   string `json:"account,omitempty"`
+	Verified  bool   `json:"-"`
+	Challenge string `json:"-"`
+	Token     string `json:"token,omitempty"`
 }
 
 func (c Claim) getNonce() int {
-	return AddressNonceLookup[c.PublicAddress]
+	return AddressNonceLookup[c.Account]
 }
 
 func (c *Claim) updateChallenge() {
@@ -71,25 +71,25 @@ func (c *Claim) updateChallenge() {
 }
 
 func (c *Claim) newChallenge() {
-	AddressNonceLookup[c.PublicAddress]++
+	AddressNonceLookup[c.Account]++
 	c.updateChallenge()
 	return
 }
 
 func (c *Claim) verify() {
-	c.Verified = verifySignature(c.PublicAddress, c.Signature, c.Challenge)
+	c.Verified = verifySignature(c.Account, c.Signature, c.Challenge)
 	return
 }
 
 func (c *Claim) updateNonce() {
-	AddressNonceLookup[c.PublicAddress]++
+	AddressNonceLookup[c.Account]++
 }
 
 func (c *Claim) updateToken() {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"name":          "unknown",
-		"publicAddress": c.PublicAddress,
-		"exp":           time.Now().Add(time.Hour * 24).Unix(),
+		"name":    "unknown",
+		"account": c.Account,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
 
 	secretSigningKey := "superdupersecret"
@@ -105,6 +105,6 @@ func (c *Claim) updateToken() {
 func (c *Claim) isValid() bool {
 	return len(c.Signature) == 132 &&
 		c.Signature[0:2] == "0x" &&
-		len(c.PublicAddress) == 42 &&
-		c.PublicAddress[0:2] == "0x"
+		len(c.Account) == 42 &&
+		c.Account[0:2] == "0x"
 }

@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -34,7 +36,7 @@ func VersionHandler(responseWriter http.ResponseWriter, request *http.Request) {
 // AddressNonceHandler controller
 func AddressNonceHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	publicKey := vars["address"]
+	publicKey := vars["account"]
 
 	if AddressNonceLookup[publicKey] == 0 {
 		AddressNonceLookup[publicKey]++
@@ -113,34 +115,43 @@ func DecodeSession(r io.ReadCloser) (x *Session, err error) {
 // SessionGetHandler controller
 func SessionGetHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	publicKey := vars["address"]
-	name := AddressNameLookup[publicKey]
-	session := Session{name}
+	publicKey := vars["account"]
+	body := AddressNameLookup[publicKey]
+	// session := Session{name}
 
-	json, err := json.Marshal(session)
-	if err != nil {
-		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// json, err := json.Marshal(session)
+	// if err != nil {
+	// 	http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.WriteHeader(http.StatusOK)
-	responseWriter.Write(json)
+	responseWriter.Write([]byte(body))
 }
 
 // SessionPostHandler controller
 func SessionPostHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	publicKey := vars["address"]
+	publicKey := vars["account"]
 
-	session, err := DecodeSession(request.Body)
+	body, err := ioutil.ReadAll(request.Body)
+
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
-		return
 	}
 
-	AddressNameLookup[publicKey] = session.Name
+	log.Println(string(body))
+
+	// session, err := DecodeSession(request.Body)
+	// if err != nil {
+	// 	http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
+
+	AddressNameLookup[publicKey] = string(body)
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	responseWriter.Write([]byte("{}"))
 	responseWriter.WriteHeader(http.StatusOK)
 }
