@@ -117,9 +117,6 @@ type Session struct {
 	Name string `json:"name,omitempty"`
 }
 
-// AddressNameLookup keep track of the nonce for each address
-var AddressNameLookup = make(map[string]string)
-
 // DecodeSession is the function that decodes the json into a session struct
 func DecodeSession(r io.ReadCloser) (x *Session, err error) {
 	x = &Session{}
@@ -130,18 +127,18 @@ func DecodeSession(r io.ReadCloser) (x *Session, err error) {
 // HandleSessionGet controller
 func HandleSessionGet(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	publicKey := vars["account"]
-	body := AddressNameLookup[publicKey]
+
+	data := GetAccountData(vars["account"])
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.WriteHeader(http.StatusOK)
-	responseWriter.Write([]byte(body))
+	responseWriter.Write([]byte(data))
 }
 
 // HandleSessionPost controller
 func HandleSessionPost(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	publicKey := vars["account"]
+	account := vars["account"]
 
 	body, err := ioutil.ReadAll(request.Body)
 
@@ -149,7 +146,8 @@ func HandleSessionPost(responseWriter http.ResponseWriter, request *http.Request
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 	}
 
-	AddressNameLookup[publicKey] = string(body)
+	SetAccountData(account, string(body))
+
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.Write([]byte("{}"))
 	responseWriter.WriteHeader(http.StatusOK)
