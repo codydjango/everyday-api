@@ -17,6 +17,10 @@ func getCors() *cors.Cors {
 			"http://127.0.0.1:3001",
 			"https://codydjango.github.io",
 		},
+		AllowedHeaders: []string{
+			"Authorization",
+			"Content-Type",
+		}
 		AllowCredentials: true,
 		Debug:            true,
 	})
