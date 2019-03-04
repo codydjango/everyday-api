@@ -128,10 +128,15 @@ func DecodeSession(r io.ReadCloser) (x *Session, err error) {
 func HandleSessionGet(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
-	data := GetAccountData(vars["account"])
+	data, err := GetAccountData(vars["account"])
+
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusNotFound)
+		return
+	}
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	responseWriter.WriteHeader(http.StatusOK)
+	// responseWriter.WriteHeader(http.StatusOK)
 	responseWriter.Write([]byte(data))
 }
 
@@ -144,11 +149,17 @@ func HandleSessionPost(responseWriter http.ResponseWriter, request *http.Request
 
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	SetAccountData(account, string(body))
+	err = SetAccountData(account, string(body))
+
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.Write([]byte("{}"))
-	responseWriter.WriteHeader(http.StatusOK)
+	// responseWriter.WriteHeader(http.StatusOK)
 }

@@ -13,6 +13,7 @@ ENV PORT=3001
 EXPOSE 3001
 
 ADD ./src ./app/src
+ADD ./data ./app/data
 ADD ./entrypoint.sh /go/app/entrypoint.sh
 
 WORKDIR /go/app/src
