@@ -24,19 +24,19 @@ var apiRoutes = Routes{
 		"Version",
 		"GET",
 		"/version/",
-		VersionHandler,
+		HandleVersion,
 	},
 	Route{
 		"Nonce",
 		"GET",
 		"/account/{account}/nonce/",
-		AddressNonceHandler,
+		HandleAddressNonce,
 	},
 	Route{
 		"Authentication",
 		"POST",
 		"/authentication/",
-		AuthenticationHandler,
+		HandleAuthentication,
 	},
 }
 
@@ -45,12 +45,12 @@ var authenticatedAPIRoutes = Routes{
 		"SessionGet",
 		"GET",
 		"/account/{account}/data/",
-		SessionGetHandler,
+		HandleSessionGet,
 	},
 	Route{
 		"SessionPost",
 		"POST",
 		"/account/{account}/data/",
-		SessionPostHandler,
+		HandleSessionPost,
 	},
 }

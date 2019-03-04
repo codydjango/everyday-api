@@ -9,14 +9,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-// VersionHandler controller returns version of the API
-func VersionHandler(responseWriter http.ResponseWriter, request *http.Request) {
+// HandleVersion controller returns version of the API
+func HandleVersion(responseWriter http.ResponseWriter, request *http.Request) {
 	version := "0.0.1"
 
 	keyMapping := make(map[string]string)
@@ -33,8 +32,24 @@ func VersionHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	responseWriter.Write(json)
 }
 
-// AddressNonceHandler controller
-func AddressNonceHandler(responseWriter http.ResponseWriter, request *http.Request) {
+// HandleAuthTest for testing authentication middleware
+func HandleAuthTest(responseWriter http.ResponseWriter, request *http.Request) {
+	keyMapping := make(map[string]string)
+	keyMapping["good"] = "good"
+
+	json, err := json.Marshal(keyMapping)
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	responseWriter.WriteHeader(http.StatusOK)
+	responseWriter.Write(json)
+}
+
+// HandleAddressNonce controller
+func HandleAddressNonce(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	publicKey := vars["account"]
 
@@ -64,8 +79,8 @@ func DecodeClaim(r io.ReadCloser) (x *Claim, err error) {
 	return
 }
 
-// AuthenticationHandler controller
-func AuthenticationHandler(responseWriter http.ResponseWriter, request *http.Request) {
+// HandleAuthentication controller
+func HandleAuthentication(responseWriter http.ResponseWriter, request *http.Request) {
 	claim, err := DecodeClaim(request.Body)
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
@@ -112,26 +127,19 @@ func DecodeSession(r io.ReadCloser) (x *Session, err error) {
 	return
 }
 
-// SessionGetHandler controller
-func SessionGetHandler(responseWriter http.ResponseWriter, request *http.Request) {
+// HandleSessionGet controller
+func HandleSessionGet(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	publicKey := vars["account"]
 	body := AddressNameLookup[publicKey]
-	// session := Session{name}
-
-	// json, err := json.Marshal(session)
-	// if err != nil {
-	// 	http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.WriteHeader(http.StatusOK)
 	responseWriter.Write([]byte(body))
 }
 
-// SessionPostHandler controller
-func SessionPostHandler(responseWriter http.ResponseWriter, request *http.Request) {
+// HandleSessionPost controller
+func HandleSessionPost(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	publicKey := vars["account"]
 
@@ -141,16 +149,7 @@ func SessionPostHandler(responseWriter http.ResponseWriter, request *http.Reques
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 	}
 
-	log.Println(string(body))
-
-	// session, err := DecodeSession(request.Body)
-	// if err != nil {
-	// 	http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
-
 	AddressNameLookup[publicKey] = string(body)
-
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.Write([]byte("{}"))
 	responseWriter.WriteHeader(http.StatusOK)

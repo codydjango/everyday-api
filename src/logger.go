@@ -7,11 +7,11 @@ import (
 )
 
 // Logger is the logger
-func Logger(inner http.Handler, name string) http.Handler {
+func Logger(next http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(responseWriter http.ResponseWriter, request *http.Request) {
 		start := time.Now()
 
-		inner.ServeHTTP(responseWriter, request)
+		next.ServeHTTP(responseWriter, request)
 
 		log.Printf(
 			"%s\t%s\t%s\t%s",

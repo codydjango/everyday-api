@@ -13,7 +13,7 @@ import (
 )
 
 // AuthenticationRequired is middleware for verifying jwt
-func AuthenticationRequired(inner http.Handler) http.Handler {
+func AuthenticationRequired(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(responseWriter http.ResponseWriter, request *http.Request) {
 		tokenString := request.Header.Get("Authorization")
 
@@ -33,12 +33,12 @@ func AuthenticationRequired(inner http.Handler) http.Handler {
 		})
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			fmt.Println(claims["name"], claims["publicAddress"], claims["exp"])
+			fmt.Println(claims["account"])
 		} else {
 			fmt.Println(err)
 		}
 
-		inner.ServeHTTP(responseWriter, request)
+		next.ServeHTTP(responseWriter, request)
 	})
 }
 
@@ -67,7 +67,7 @@ func CreateRouter() *mux.Router {
 			Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
-			Handler(Logger(route.HandlerFunc, route.Name))
+			Handler(AuthenticationRequired(Logger(route.HandlerFunc, route.Name)))
 	}
 
 	return router
