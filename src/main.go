@@ -20,7 +20,7 @@ func getCors() *cors.Cors {
 		AllowedHeaders: []string{
 			"Authorization",
 			"Content-Type",
-		}
+		},
 		AllowCredentials: true,
 		Debug:            true,
 	})
