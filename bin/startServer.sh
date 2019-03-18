@@ -7,6 +7,7 @@ DATA_DIR="$ROOT_DIR/data";
 ENVIRONMENT="development";
 
 docker run \
+	--detach \
     --rm \
     --interactive \
     --tty \

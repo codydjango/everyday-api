@@ -17,6 +17,11 @@ func AuthenticationRequired(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(responseWriter http.ResponseWriter, request *http.Request) {
 		tokenString := request.Header.Get("Authorization")
 
+		if len(tokenString) == 0 {
+			http.Error(responseWriter, http.StatusText(400), 400)
+			return
+		}
+
 		// Parse takes the token string and a function for looking up the key. The latter is especially
 		// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 		// head of the token to identify which key to use, but the parsed token (head and claims) is provided
@@ -32,10 +37,20 @@ func AuthenticationRequired(next http.Handler) http.Handler {
 			return hmacSampleSecret, nil
 		})
 
+		if err != nil {
+			fmt.Println("error in token parsing")
+			fmt.Println(err)
+			http.Error(responseWriter, http.StatusText(400), 400)
+			return
+		}
+
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			fmt.Println("successfull decoding claims")
 			fmt.Println(claims["account"])
 		} else {
-			fmt.Println(err)
+			fmt.Println("error decoding claims")
+			http.Error(responseWriter, http.StatusText(400), 400)
+			return
 		}
 
 		next.ServeHTTP(responseWriter, request)
