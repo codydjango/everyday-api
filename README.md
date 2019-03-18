@@ -1,11 +1,12 @@
 # Everday API
 
-This is a golang authentication microservice for the everday app. 
+Ethereum signed message verification and JWT authentication microservice. Cors enabled.
 
-Functionality is pretty basic: it takes a request, returns a message to be signed by a users' ethereum private key, verifies with the provided public key, and if it's correct returns a JWT with the appropriate session data. 
+### Requirements
+You'll need docker installed.
 
 ### Development notes
 
-`source ./bin/scripts.sh`
+Development: `./bin/buildServer.sh && ./bin/startServer.sh`
 
-`build && start`
+Production: `./bin/buildServer.sh && ./bin/startProductionServer.sh`
