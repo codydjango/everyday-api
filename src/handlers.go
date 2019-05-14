@@ -1,5 +1,5 @@
 /*
-Controllers.
+Controllers functions for Everyday API 
 */
 
 package main
@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// HandleVersion controller returns version of the API
+// HandleVersion controller returns version of the API.
 func HandleVersion(responseWriter http.ResponseWriter, request *http.Request) {
 	version := "0.0.1"
 
@@ -32,7 +32,7 @@ func HandleVersion(responseWriter http.ResponseWriter, request *http.Request) {
 	responseWriter.Write(json)
 }
 
-// HandleAuthTest for testing authentication middleware
+// HandleAuthTest for testing authentication middleware.
 func HandleAuthTest(responseWriter http.ResponseWriter, request *http.Request) {
 	keyMapping := make(map[string]string)
 	keyMapping["good"] = "good"
@@ -48,7 +48,7 @@ func HandleAuthTest(responseWriter http.ResponseWriter, request *http.Request) {
 	responseWriter.Write(json)
 }
 
-// HandleAddressNonce controller
+// HandleAddressNonce controller to keep track of nonce for signed message validation.
 func HandleAddressNonce(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	publicKey := vars["account"]
@@ -72,14 +72,15 @@ func HandleAddressNonce(responseWriter http.ResponseWriter, request *http.Reques
 	responseWriter.Write(json)
 }
 
-// DecodeClaim is the function that decodes the json into a claim struct
+// DecodeClaim decodes the json into a claim struct.
 func DecodeClaim(r io.ReadCloser) (x *Claim, err error) {
 	x = &Claim{}
 	err = json.NewDecoder(r).Decode(x)
 	return
 }
 
-// HandleAuthentication controller
+// HandleAuthentication checks that the signed messaged is valid and verified,
+// if so returns jsonToken.
 func HandleAuthentication(responseWriter http.ResponseWriter, request *http.Request) {
 	claim, err := DecodeClaim(request.Body)
 	if err != nil {
@@ -112,19 +113,19 @@ func HandleAuthentication(responseWriter http.ResponseWriter, request *http.Requ
 	responseWriter.Write(json)
 }
 
-// Session for session info
+// Session for session info.
 type Session struct {
 	Name string `json:"name,omitempty"`
 }
 
-// DecodeSession is the function that decodes the json into a session struct
+// DecodeSession is the function that decodes the json into a session struct.
 func DecodeSession(r io.ReadCloser) (x *Session, err error) {
 	x = &Session{}
 	err = json.NewDecoder(r).Decode(x)
 	return
 }
 
-// HandleSessionGet controller
+// HandleSessionGet controller reads data file and returns payload.
 func HandleSessionGet(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
@@ -140,7 +141,7 @@ func HandleSessionGet(responseWriter http.ResponseWriter, request *http.Request)
 	responseWriter.Write([]byte(data))
 }
 
-// HandleSessionPost controller
+// HandleSessionPost take payload and write it to file.
 func HandleSessionPost(responseWriter http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	account := vars["account"]
@@ -161,5 +162,4 @@ func HandleSessionPost(responseWriter http.ResponseWriter, request *http.Request
 
 	responseWriter.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	responseWriter.Write([]byte("{}"))
-	// responseWriter.WriteHeader(http.StatusOK)
 }

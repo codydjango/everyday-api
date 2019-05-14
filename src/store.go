@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-// GetAccountData is account data
+// GetAccountData reads json file and returns it
 func GetAccountData(account string) (string, error) {
 	pwd, _ := os.Getwd()
 	path := filepath.Join(pwd, fmt.Sprintf("../data/saves/%s.json", account))
@@ -20,7 +20,7 @@ func GetAccountData(account string) (string, error) {
 	return string(data), err
 }
 
-// SetAccountData is account data
+// SetAccountData writes json to file
 func SetAccountData(account, data string) error {
 	pwd, _ := os.Getwd()
 	path := filepath.Join(pwd, fmt.Sprintf("../data/saves/%s.json", account))
